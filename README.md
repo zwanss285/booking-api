@@ -1,58 +1,261 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📅 Booking API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi booking jadwal berbasis web yang dibangun dengan **Laravel** menggunakan **Sanctum** untuk autentikasi, **Form Request** untuk validasi, dan **API Resource** untuk response yang terstruktur. Proyek ini dibuat sebagai bagian dari **PKL (Praktik Kerja Lapangan)**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fitur
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- 🔐 Autentikasi dengan Laravel Sanctum (register, login, logout)
+- 📋 Daftar jadwal tersedia (guest & authenticated)
+- 🔖 Booking jadwal oleh pengguna yang sudah login
+- ❌ Pembatalan booking
+- ✅ Validasi kapasitas slot & double booking
+- 🌐 Mode dual: **REST API** + **Web (Blade)**
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🛠️ Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+| Layer | Teknologi |
+|---|---|
+| Backend | Laravel 11 |
+| Auth | Laravel Sanctum |
+| Frontend | Bootstrap 5, Font Awesome 6, Blade |
+| Validasi | Form Request |
+| Response | API Resource |
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 📁 Struktur Proyek
 
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
-
-```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   │   ├── Api/
+│   │   │   ├── AuthController.php       # Register, Login, Logout (API)
+│   │   │   ├── BookingController.php    # Booking via API
+│   │   │   └── ScheduleController.php  # Jadwal via API
+│   │   └── Web/
+│   │       ├── AuthController.php      # Login/Register/Logout (Web)
+│   │       ├── BookingController.php   # Booking via Web
+│   │       ├── DashboardController.php
+│   │       └── HomeController.php
+│   ├── Requests/
+│   │   ├── LoginRequest.php
+│   │   ├── RegisterRequest.php
+│   │   └── StoreBookingRequest.php
+│   └── Resources/
+│       ├── BookingResource.php
+│       ├── ScheduleResource.php
+│       └── UserResource.php
+├── Models/
+│   ├── Booking.php
+│   ├── Schedule.php
+│   └── User.php
+routes/
+├── api.php
+└── web.php
+resources/views/
+├── layouts/app.blade.php
+├── auth/
+│   ├── login.blade.php
+│   └── register.blade.php
+├── dashboard.blade.php
+├── home.blade.php
+├── my-bookings.blade.php
+└── schedule-detail.blade.php
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 🚀 Instalasi
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Clone repositori
 
-## Code of Conduct
+```bash
+git clone https://github.com/username/booking-api.git
+cd booking-api
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Install dependensi
 
-## Security Vulnerabilities
+```bash
+composer install
+npm install && npm run build
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Konfigurasi environment
 
-## License
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Edit file `.env` dan sesuaikan konfigurasi database:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=booking_api
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+### 4. Migrasi & seeder
+
+```bash
+php artisan migrate
+php artisan db:seed   # opsional, jika tersedia seeder jadwal
+```
+
+### 5. Jalankan aplikasi
+
+```bash
+php artisan serve
+```
+
+Aplikasi berjalan di `http://localhost:8000`
+
+---
+
+## 🗺️ API Endpoints
+
+### Auth (Guest)
+
+| Method | Endpoint | Deskripsi |
+|---|---|---|
+| POST | `/api/register` | Daftarkan akun baru |
+| POST | `/api/login` | Login & dapatkan token |
+
+### Jadwal (Guest)
+
+| Method | Endpoint | Deskripsi |
+|---|---|---|
+| GET | `/api/schedules` | Daftar semua jadwal |
+| GET | `/api/schedules?available_only=1` | Hanya jadwal tersedia |
+| GET | `/api/schedules/{id}` | Detail jadwal |
+
+### Booking (Auth — Bearer Token)
+
+| Method | Endpoint | Deskripsi |
+|---|---|---|
+| POST | `/api/bookings` | Buat booking baru |
+| GET | `/api/bookings/me` | Riwayat booking user |
+| DELETE | `/api/bookings/{id}` | Batalkan booking |
+| POST | `/api/logout` | Logout & hapus token |
+
+---
+
+## 📬 Contoh Request & Response
+
+### Register
+
+**Request:**
+```json
+POST /api/register
+{
+  "name": "Budi Santoso",
+  "email": "budi@example.com",
+  "password": "password123",
+  "password_confirmation": "password123"
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Registrasi berhasil",
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "Budi Santoso",
+      "email": "budi@example.com"
+    },
+    "token": "1|xxxxxxxxxxxxxxxx"
+  }
+}
+```
+
+### Buat Booking
+
+**Request:**
+```json
+POST /api/bookings
+Authorization: Bearer {token}
+
+{
+  "schedule_id": 3
+}
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "message": "Booking berhasil",
+  "data": {
+    "id": 7,
+    "schedule": {
+      "id": 3,
+      "title": "Kelas Laravel Dasar",
+      "start_time": "2026-06-01T09:00:00",
+      "end_time": "2026-06-01T11:00:00",
+      "slot_capacity": 20,
+      "available_slots": 14,
+      "is_available": true
+    },
+    "status": "booked",
+    "booked_at": "2026-05-30 10:00:00"
+  }
+}
+```
+
+---
+
+## ✅ Validasi Booking
+
+`StoreBookingRequest` secara otomatis menolak permintaan jika:
+
+- `schedule_id` tidak ditemukan di database
+- Waktu mulai jadwal sudah lewat
+- `start_time >= end_time` pada jadwal
+- User sudah pernah booking jadwal yang sama (double booking)
+- Kapasitas slot sudah penuh
+
+---
+
+## 🌐 Halaman Web
+
+| URL | Deskripsi |
+|---|---|
+| `/` | Daftar jadwal |
+| `/schedules/{id}` | Detail & tombol booking |
+| `/login` | Halaman login |
+| `/register` | Halaman registrasi |
+| `/dashboard` | Dashboard user (auth) |
+| `/my-bookings` | Riwayat booking user (auth) |
+
+---
+
+## 🔑 Status Booking
+
+| Status | Warna | Keterangan |
+|---|---|---|
+| `booked` | 🟡 Kuning | Booking aktif |
+| `cancelled` | ⚫ Abu-abu | Booking dibatalkan |
+
+---
+
+## 👨‍💻 Author
+
+Dibuat untuk keperluan **PKL** — Laravel dengan Sanctum, Form Request, dan Resource.
+
+---
+
+## 📄 Lisensi
+
+Proyek ini menggunakan lisensi [MIT](LICENSE).
